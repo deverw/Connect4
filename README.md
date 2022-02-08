@@ -12,7 +12,7 @@ make
 This will start a game human player (red) against computer (yellow).
 Move the joystick left and right to choose your column, move down or push to drop the current tile.
 
-You can change the roles by calling the programm with parameters:
+You can change the roles by calling the program with parameters:
 <code>
 ./connect4 c h (computer to move first)
 ./connect4 h h (human vs. human)
