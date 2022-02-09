@@ -1,6 +1,11 @@
 // Abstraction layer for input device (e.g. joystick, keyboard)
-
+// Handle initialisation of input device with constructor / destructor
+// Deliver 8 bit unsigned integer value with detected input (2^0 -> left, 2^1 -> right, 2^2 -> up, 2^3 -> down, 2^4 -> fire)
+//
 // Variant for RaspberryPi SenseHat joystick
+//
+// Written by Stefan Abendroth <sab@ab-solut.com>
+// Last updated: 2022-02-09
 
 #ifndef _INPUT_
 #define _INPUT_

@@ -1,4 +1,8 @@
-// Connect Four computer player
+// Connect4 computer player
+// providing different agents for selecting a move (random, request server)
+//
+// Written by Stefan Abendroth <sab@ab-solut.com>
+// Last updated: 2022-02-09
 
 #ifndef _ENGINE_
 #define _ENGINE_
@@ -17,9 +21,6 @@ class Engine
 
         // calculate next move for player according to current tiles
         uint8_t propose_move(uint8_t tiles[ROWS][COLUMNS], uint8_t player);
-
-        // search for patterns of 4 in tiles, write coordinates into win_pattern and return winning player (or 0) 
-        uint8_t check_winner(uint8_t tiles[ROWS][COLUMNS], uint8_t win_pattern[4][2]);
 
     private:
         // return random move

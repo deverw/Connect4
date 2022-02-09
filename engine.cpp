@@ -1,4 +1,8 @@
-// Connect Four computer player
+// Connect4 computer player
+// providing different agents for selecting a move (random, request server)
+//
+// Written by Stefan Abendroth <sab@ab-solut.com>
+// Last updated: 2022-02-09
 
 #include "engine.hpp"
 
@@ -87,82 +91,4 @@ uint8_t Engine::propose_move(uint8_t tiles[ROWS][COLUMNS], uint8_t player)
 // return random_agent();
 {
     return server_agent(tiles, player);
-}
-
-uint8_t Engine::check_winner(uint8_t tiles[ROWS][COLUMNS], uint8_t win_pattern[4][2])
-// search 4 adjacent tiles, write coordinates into win_pattern and return winning player (or 0)
-// algorithm: for each tile in board, search for same color in all 4 orientations (/,|,\,-)
-{   
-    uint8_t win_count=0;    // count to 4
-    uint8_t player=0;   // winning player
-    uint8_t cr=0;        // current check row
-    uint8_t cc=0;        // current check column
-    uint8_t winner=0;
-
-    // for all tiles
-    for (uint8_t row=0; row<ROWS; row++)
-    {
-        for (uint8_t col=0; col<COLUMNS; col++)
-        {
-            player=tiles[row][col];
-
-            // search southwest
-            win_count=0;
-            cr=row;
-            cc=col;
-            while ((winner==0) && player && (tiles[cr][cc]==player) && (cr>=0) && (cc>=0) && (cr<ROWS) && (cc<COLUMNS) && (win_count<4))
-            {
-                win_pattern[win_count][0]=cr;
-                win_pattern[win_count][1]=cc;
-                win_count++;
-                cr+=1;
-                cc-=1;
-            }
-            if (win_count>=4) winner=player;
-
-            // search south
-            win_count=0;
-            cr=row;
-            cc=col;
-            while ((winner==0) && player && (tiles[cr][cc]==player) && (cr>=0) && (cc>=0) && (cr<ROWS) && (cc<COLUMNS) && (win_count<4))
-            {
-                win_pattern[win_count][0]=cr;
-                win_pattern[win_count][1]=cc;
-                win_count++;
-                cr+=1;
-            }
-            if (win_count>=4) winner=player;
-
-            // search southeast
-            win_count=0;
-            cr=row;
-            cc=col;
-            while ((winner==0) && player && (tiles[cr][cc]==player) && (cr>=0) && (cc>=0) && (cr<ROWS) && (cc<COLUMNS) && (win_count<4))
-            {
-                win_pattern[win_count][0]=cr;
-                win_pattern[win_count][1]=cc;
-                win_count++;
-                cr+=1;
-                cc+=1;
-            }
-            if (win_count>=4) winner=player;
-
-            // search east
-            win_count=0;
-            cr=row;
-            cc=col;
-            while ((winner==0) && player && (tiles[cr][cc]==player) && (cr>=0) && (cc>=0) && (cr<ROWS) && (cc<COLUMNS) && (win_count<4))
-            {
-                win_pattern[win_count][0]=cr;
-                win_pattern[win_count][1]=cc;
-                win_count++;
-                cc+=1;
-            }
-            if (win_count>=4) winner=player;
-
-            if (winner) break;  // no need to complete for-loop
-        }
-        if (winner) break;   // no need to complete for-loop
-    }
-    return winner;
 }

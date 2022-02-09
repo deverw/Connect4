@@ -1,3 +1,13 @@
+// Connect4 game
+// Call with two parameters: h for human player, c for computer player (default h c)
+// e.g. ./connect4 c h
+//
+// Modules for input device, display and computer engine can be exchanged and extended
+// without interference with game logic.
+//
+// Written by Stefan Abendroth <sab@ab-solut.com>
+// Last updated: 2022-02-09
+
 #include <iostream>     // std::cout, std::endl
 #include <unistd.h>     // sleep, usleep
 #include "display.hpp"  // display abstraction
@@ -24,7 +34,6 @@ class Game
                               // {1,0}=human vs. computer (default)
                               // {0,1}=computer vs. human
                               // {1,1}=human vs. human
-  uint8_t win_pattern[4][2]={0};  // coordinates of winning stones
   uint8_t winner=0;   // 0: no winner, 1: player 1, 2: player 2
 
   void move()
@@ -69,11 +78,89 @@ class Game
       tiles[landing_row][position]=player;
       move_count++;
       // check for winner
-      winner=engine.check_winner(tiles,win_pattern);
+      check_winner();
       if (winner==0)
         // next player
         player^=3;  // 1 XOR 3 = 2 ; 2 XOR 3 = 1
     }
+  }
+
+  void check_winner()
+  // search 4 adjacent tiles, write tile coordinates into win_pattern and set winner
+  // (0 for nobody, 1 or 2 for respective player)
+  // algorithm: for each tile in board, search in all 4 orientations (/,|,\,-) in single steps
+  // as long as same color is found and edge of board is not hit. After first sequence of 4, we have a winner.
+  {   
+      uint8_t win_count=0;  // count to 4
+      uint8_t cp=0;         // player being checked
+      uint8_t cr=0;         // current check row
+      uint8_t cc=0;         // current check column
+
+      // for all tiles
+      for (uint8_t row=0; row<ROWS; row++)
+      {
+          for (uint8_t col=0; col<COLUMNS; col++)
+          {
+              cp=tiles[row][col];
+
+              // search southwest
+              win_count=0;
+              cr=row;
+              cc=col;
+              while ((winner==0) && cp && (tiles[cr][cc]==player) && (cr>=0) && (cc>=0) && (cr<ROWS) && (cc<COLUMNS) && (win_count<4))
+              {
+                  win_pattern[win_count][0]=cr;
+                  win_pattern[win_count][1]=cc;
+                  win_count++;
+                  cr+=1;
+                  cc-=1;
+              }
+              if (win_count>=4) winner=cp;
+
+              // search south
+              win_count=0;
+              cr=row;
+              cc=col;
+              while ((winner==0) && cp && (tiles[cr][cc]==player) && (cr>=0) && (cc>=0) && (cr<ROWS) && (cc<COLUMNS) && (win_count<4))
+              {
+                  win_pattern[win_count][0]=cr;
+                  win_pattern[win_count][1]=cc;
+                  win_count++;
+                  cr+=1;
+              }
+              if (win_count>=4) winner=cp;
+
+              // search southeast
+              win_count=0;
+              cr=row;
+              cc=col;
+              while ((winner==0) && cp && (tiles[cr][cc]==player) && (cr>=0) && (cc>=0) && (cr<ROWS) && (cc<COLUMNS) && (win_count<4))
+              {
+                  win_pattern[win_count][0]=cr;
+                  win_pattern[win_count][1]=cc;
+                  win_count++;
+                  cr+=1;
+                  cc+=1;
+              }
+              if (win_count>=4) winner=cp;
+
+              // search east
+              win_count=0;
+              cr=row;
+              cc=col;
+              while ((winner==0) && cp && (tiles[cr][cc]==player) && (cr>=0) && (cc>=0) && (cr<ROWS) && (cc<COLUMNS) && (win_count<4))
+              {
+                  win_pattern[win_count][0]=cr;
+                  win_pattern[win_count][1]=cc;
+                  win_count++;
+                  cc+=1;
+              }
+              if (win_count>=4) winner=cp;
+
+              if (winner) break;  // no need to complete for-loop
+          }
+          if (winner) break;   // no need to complete for-loop
+      }
   }
 
   void show_winner()
@@ -91,12 +178,13 @@ class Game
   }
 
   private:
-  Display display;
-  Input input;
-  Engine engine;
-  uint8_t tiles[ROWS][COLUMNS] = {0};
-  uint8_t player=1;
-  uint8_t position=(COLUMNS-1)/2;
+  Display display;                      // details of display in separate class
+  Input input;                          // details of input device in separate class
+  Engine engine;                        // details of computer moves in separate class
+  uint8_t tiles[ROWS][COLUMNS] = {0};   // state of board (0: empty, 1: player 1, 2: player 2)
+  uint8_t player=1;                     // current player, start with 1
+  uint8_t position=(COLUMNS-1)/2;       // default position for human player
+  uint8_t win_pattern[4][2] = {0};      // coordinates of winning tiles, only valid if winner>0
 };
 
 int main(int argc, char* argv[])

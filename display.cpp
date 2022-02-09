@@ -1,8 +1,13 @@
 // Abstraction layer for Connect Four display
-
+//
 // Variant for Raspberry Pi SenseHat LED display
+//
+// Written by Stefan Abendroth <sab@ab-solut.com>
+// Last updated: 2022-02-09
 
 #include "display.hpp"
+#include <unistd.h>             // usleep
+#include "libs/led_matrix.h"    // Raspberry Pi SenseHat LED display
 
 Display::Display()
 {
