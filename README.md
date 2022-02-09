@@ -12,7 +12,7 @@ After cloning the repository, start with:
 make
 </code><br><code>
 ./connect4
-</code><br>
+</code><br><br>
 This will start a game human player (red) against computer (yellow).
 Move the joystick left and right to choose your column, move down or push to drop the current tile.
 
@@ -29,7 +29,8 @@ You can change the roles by calling the program with parameters:
 <code>
 ./connect4 c c
 </code> (computer vs. computer)
-<br>
+<br><br>
 On execution on a RaspberryPi without the SenseHat extension or a normal PC, an
 <code>Error on call to open(): No such file or directory</code>
-will be thrown, since the devices defined in libs/joystick.h and libs/led_matrix.h (/dev/input/event0 and /dev/fb1) do not exist.
+will be thrown, since the devices defined in libs/joystick.h and libs/led_matrix.h (/dev/input/event0 and /dev/fb1) do not exist.<br>
+The SenseHat libraries have been provided by Pontus Ekberg (pontus.ekberg@it.uu.se).
