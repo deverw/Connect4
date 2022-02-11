@@ -7,7 +7,7 @@
 // without interference with game logic.
 //
 // Written by Stefan Abendroth <sab@ab-solut.com>
-// Last updated: 2022-02-09
+// Last updated: 2022-02-11
 
 #include <iostream>     // cout, endl
 #include <unistd.h>     // sleep, usleep

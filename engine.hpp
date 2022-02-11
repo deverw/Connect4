@@ -2,7 +2,7 @@
 // providing different agents for selecting a move (random, request server)
 //
 // Written by Stefan Abendroth <sab@ab-solut.com>
-// Last updated: 2022-02-09
+// Last updated: 2022-02-11
 
 #ifndef _ENGINE_
 #define _ENGINE_
