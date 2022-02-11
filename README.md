@@ -36,4 +36,4 @@ Example:
 On execution on a RaspberryPi without the SenseHat extension or a normal PC, an
 <code>Error on call to open(): No such file or directory</code>
 will be thrown, since the devices defined in libs/joystick.h and libs/led_matrix.h (/dev/input/event0 and /dev/fb1) do not exist.<br>
-The SenseHat libraries have been provided by Pontus Ekberg (pontus.ekberg@it.uu.se).
+The SenseHat libraries were written by Pontus Ekberg (pontus.ekberg@it.uu.se).
