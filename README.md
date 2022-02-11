@@ -16,19 +16,22 @@ make
 This will start a game human player (red) against computer (yellow).
 Move the joystick left and right to choose your column, move down or push to drop the current tile.
 
-You can change the roles by calling the program with parameters:
-
+You can change the roles by calling the program with command line parameters:<br>
 <code>
 ./connect4 c h
-</code> (computer to move first)
-
+</code> (computer to move first)<br>
 <code>
 ./connect4 h h
-</code> (human vs. human)
-
+</code> (human vs. human)<br>
 <code>
 ./connect4 c c
-</code> (computer vs. computer)
+</code> (computer vs. computer)<br>
+
+By adding a one digit number after c, you can change the level of the computer player (0=random moves only, 9=best moves the server can find, intermediate values increase the probability for server moves). Default is always c9 (highest level).<br>
+Example:
+<code>
+  ./connect4 h c7
+</code> (human vs. computer with ~22% random moves)
 <br><br>
 On execution on a RaspberryPi without the SenseHat extension or a normal PC, an
 <code>Error on call to open(): No such file or directory</code>
