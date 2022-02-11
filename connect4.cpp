@@ -1,6 +1,7 @@
 // Connect4 game
-// Call with two parameters: h for human player, c for computer player (default h c)
-// e.g. ./connect4 c h
+// Call with two parameters: h for human player, c for computer player (default h c).
+// For computer players, a number can be attached to c defining the level from 0-9 (default c9).
+// e.g. ./connect4 c5 h
 //
 // Modules for input device, display and computer engine can be exchanged and extended
 // without interference with game logic.
@@ -8,7 +9,7 @@
 // Written by Stefan Abendroth <sab@ab-solut.com>
 // Last updated: 2022-02-09
 
-#include <iostream>     // std::cout, std::endl
+#include <iostream>     // cout, endl
 #include <unistd.h>     // sleep, usleep
 #include "display.hpp"  // display abstraction
 #include "input.hpp"    // input abstraction
@@ -29,18 +30,20 @@ class Game
   Game() {}
   
   uint8_t move_count=0;    // counter for moves
-  uint8_t config[2]={1,0};    // game configuration {player1, player2}
-                              // {0,0}=computer vs. computer
-                              // {1,0}=human vs. computer (default)
-                              // {0,1}=computer vs. human
-                              // {1,1}=human vs. human
+  uint8_t config[2]={255,9};  // game configuration {player1, player2}
+                              // {255,255}=human vs. human
+                              // {255,n}=human vs. computer level n (n=1..10, default n=10)
+                              // {n,255}=computer level n vs. human
+                              // {n,n}=computer level n vs. computer level n
   uint8_t winner=0;   // 0: no winner, 1: player 1, 2: player 2
 
   void move()
   {
     uint8_t last_input=0;
-    if (config[player-1])
-    {   // human player?
+    if (config[player-1]<10)    // computer player
+      position=engine.propose_move(tiles,player,config[player-1]);
+    else    // human player
+    {   
       position=(COLUMNS-1)/2;
       display.show_entry(position,player);
       do
@@ -58,8 +61,6 @@ class Game
         }
       } while ((last_input&(INPUT_DOWN|INPUT_FIRE))==0);
     }
-    else  // computer player
-      position=engine.propose_move(tiles,player);
     drop();
   }
 
@@ -189,30 +190,29 @@ class Game
 
 int main(int argc, char* argv[])
 {
+    using namespace std;
     Game game;
-    // parse arguments
-    if (argc==3)
+    // parse command line arguments
+    for (uint8_t i=1; i<limit(argc,1,3); i++)
     {
-      if (*argv[1]=='c')
-        game.config[0]=0;
-      else game.config[0]=1;
-      if (*argv[2]=='c')
-        game.config[1]=0;
-      else game.config[1]=1;
+      if (argv[i][0]=='c')    // computer player only if 'c' is selected
+        if (argv[i][1]>='0' && argv[i][1]<='9')
+          game.config[i-1]=argv[i][1]-'0';  // subtraction of ASCII values
+        else game.config[i-1]=9;   // default level 9
+      else game.config[i-1]=255;
     }
     // game loop
-    do
+    while (game.move_count<(ROWS*COLUMNS) && (game.winner==0))
     {
       game.move();
     }
-    while (game.move_count<(ROWS*COLUMNS) && (game.winner==0));
     if (game.winner)
     {
-      std::cout<<"Player "<<unsigned(game.winner)<<" wins after "<<unsigned(game.move_count)<<" moves!"<<std::endl;
+      cout<<"Player "<<unsigned(game.winner)<<" wins after "<<unsigned(game.move_count)<<" moves!"<<endl;
       game.show_winner();
     }
     else
-      std::cout<<"Draw!"<<std::endl;
+      cout<<"Draw!"<<endl;
     sleep(1);
-    return 0;
+    return game.winner;
 }

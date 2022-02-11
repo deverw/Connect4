@@ -84,11 +84,15 @@ uint8_t Engine::server_agent(uint8_t tiles[ROWS][COLUMNS], uint8_t player)
     return result;
 }
 
-uint8_t Engine::propose_move(uint8_t tiles[ROWS][COLUMNS], uint8_t player)
-// deliver move to game layer
-// possible agents:
-// return server_agent(tiles, player);
-// return random_agent();
+uint8_t Engine::propose_move(uint8_t tiles[ROWS][COLUMNS], uint8_t player, uint8_t level)
+// Deliver move of player (1 or 2), according to current board state defined by array tiles.
+// level 0 will use random moves only, while level 9 uses server moves only.
+// Any number inbetween mixes random and server moves with increasing probability for server moves.
 {
-    return server_agent(tiles, player);
+    uint8_t result;
+    if (rand()%9 < level)
+        result=server_agent(tiles, player);
+    else
+        result=random_agent();
+    return result;
 }

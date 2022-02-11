@@ -20,7 +20,7 @@ class Engine
         Engine();
 
         // calculate next move for player according to current tiles
-        uint8_t propose_move(uint8_t tiles[ROWS][COLUMNS], uint8_t player);
+        uint8_t propose_move(uint8_t tiles[ROWS][COLUMNS], uint8_t player, uint8_t level);
 
     private:
         // return random move
