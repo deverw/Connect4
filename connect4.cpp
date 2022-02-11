@@ -203,9 +203,7 @@ int main(int argc, char* argv[])
     }
     // game loop
     while (game.move_count<(ROWS*COLUMNS) && (game.winner==0))
-    {
       game.move();
-    }
     if (game.winner)
     {
       cout<<"Player "<<unsigned(game.winner)<<" wins after "<<unsigned(game.move_count)<<" moves!"<<endl;
